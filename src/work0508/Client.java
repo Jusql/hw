@@ -17,14 +17,11 @@ public class Client {
             Socket socket = new Socket(host, port);
             // 建立连接后获得输出流
             OutputStream outputStream = socket.getOutputStream();
-
             String message;
             message = scanner.next();
             socket.getOutputStream().write(message.getBytes("UTF-8"));
-
             //通过shutdownOutput告诉服务器已经发送完数据，后续只能接受数据
             socket.shutdownOutput();
-
             InputStream inputStream = socket.getInputStream();
             byte[] bytes = new byte[1024];
             int len;
@@ -34,7 +31,6 @@ public class Client {
                 sb.append(new String(bytes, 0, len, "UTF-8"));
             }
             System.out.println("get message from server: " + sb);
-
             inputStream.close();
             outputStream.close();
             socket.close();
