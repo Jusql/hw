@@ -3,39 +3,41 @@ package work0508;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client {
     public static void main(String args[]) throws Exception {
+        Scanner scanner = new Scanner(System.in);
 
         // 要连接的服务端IP地址和端口
         String host = "127.0.0.1";
         int port = 55533;
-        // 与服务端建立连接
+        while (true) {
+            // 与服务端建立连接
+            Socket socket = new Socket(host, port);
+            // 建立连接后获得输出流
+            OutputStream outputStream = socket.getOutputStream();
 
-        Socket socket = new Socket(host, port);
-        // 建立连接后获得输出流
-        OutputStream outputStream = socket.getOutputStream();
+            String message;
+            message = scanner.next();
+            socket.getOutputStream().write(message.getBytes("UTF-8"));
 
-        String message = "hello";
+            //通过shutdownOutput告诉服务器已经发送完数据，后续只能接受数据
+            socket.shutdownOutput();
 
-        socket.getOutputStream().write(message.getBytes("UTF-8"));
+            InputStream inputStream = socket.getInputStream();
+            byte[] bytes = new byte[1024];
+            int len;
+            StringBuilder sb = new StringBuilder();
+            while ((len = inputStream.read(bytes)) != -1) {
+                //注意指定编码格式，发送方和接收方一定要统一，建议使用UTF-8
+                sb.append(new String(bytes, 0, len, "UTF-8"));
+            }
+            System.out.println("get message from server: " + sb);
 
-        //通过shutdownOutput告诉服务器已经发送完数据，后续只能接受数据
-        socket.shutdownOutput();
-
-        InputStream inputStream = socket.getInputStream();
-        byte[] bytes = new byte[1024];
-        int len;
-        StringBuilder sb = new StringBuilder();
-        while ((len = inputStream.read(bytes)) != -1) {
-            //注意指定编码格式，发送方和接收方一定要统一，建议使用UTF-8
-            sb.append(new String(bytes, 0, len, "UTF-8"));
+            inputStream.close();
+            outputStream.close();
+            socket.close();
         }
-        System.out.println("get message from server: " + sb);
-
-        inputStream.close();
-        outputStream.close();
-        socket.close();
-
     }
 }

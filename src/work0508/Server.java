@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 /**
  * 作业：
@@ -17,8 +18,11 @@ import java.nio.charset.StandardCharsets;
  */
 public class Server {
     public static void main(String[] args) throws Exception {
+
+        Scanner scanner = new Scanner(System.in);
         // 监听指定的端口
         int port = 55533;
+        while (true){
         ServerSocket server = new ServerSocket(port);
 
         // server将一直等待连接的到来
@@ -36,7 +40,8 @@ public class Server {
         }
         System.out.println("get message from client: " + sb);
         PrintWriter printWriter = new PrintWriter(outputStream);
-        String strBack = "已接收到hello";
+//        String strBack;
+        String strBack = scanner.next();
         printWriter.write(new String(strBack.getBytes(), "UTF-8"));
         printWriter.flush();
 
@@ -44,6 +49,8 @@ public class Server {
         inputStream.close();
         socket.close();
         server.close();
+
+        }
     }
 
 }
