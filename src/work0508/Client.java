@@ -8,7 +8,6 @@ import java.util.Scanner;
 public class Client {
     public static void main(String args[]) throws Exception {
         Scanner scanner = new Scanner(System.in);
-
         // 要连接的服务端IP地址和端口
         String host = "127.0.0.1";
         int port = 55533;
